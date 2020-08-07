@@ -25,17 +25,6 @@ public class HashSetTest {
             assertTrue(test.contains(i * 11));
             assertEquals(i, test.size());
         }
-
-        int index = 0;
-        for (int i: test.data) {
-
-            if (i == Integer.MIN_VALUE) {
-                System.out.print(index + ":" + "E, ");
-            } else {
-                System.out.print(index + ":" + i + ", ");
-            }
-            index++;
-        }
     }
 
     @Test

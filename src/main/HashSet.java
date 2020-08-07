@@ -3,7 +3,7 @@ package main;
 import java.util.Arrays;
 
 public class HashSet {
-    public int data[], capacity, size;
+    private int data[], capacity, size;
     private final double ratio;
 
     public HashSet() {
@@ -104,6 +104,8 @@ public class HashSet {
                 add(temp);
 
                 index++;
+
+                if (index == capacity) index = 0;
             }
         }
 
@@ -111,13 +113,5 @@ public class HashSet {
 
     public int size() {
         return size;
-    }
-
-    public static void main(String[] args) {
-        int newCapacity = 2 * 11;
-        while (!isPrime(newCapacity)) {
-            newCapacity--;
-        }
-        System.out.println(newCapacity);
     }
 }
