@@ -46,6 +46,25 @@ public class BSTreeTest {
     }
 
     @Test
+    public void testVerticalTraversal() {
+        BSTree t = new BSTree();
+        t.root = t.insertKey(t.root, 9);
+        t.root = t.insertKey(t.root, 3);
+        t.root = t.insertKey(t.root, 20);
+        t.root = t.insertKey(t.root, 15);
+        t.root = t.insertKey(t.root, 27);
+        List<List<Integer>> expected = Arrays.asList(Arrays.asList(3), Arrays.asList(9,15), Arrays.asList(20), Arrays.asList(27));
+
+        List<List<Integer>> actual = t.verticalTraversal(t.root);
+        for (int i = 0; i < expected.size(); i++) {
+            int len = expected.get(i).size();
+            for (int j = 0; j < len; j++) {
+                assertEquals(expected.get(i).get(j), actual.get(i).get(j));
+            }
+        }
+    }
+
+    @Test
     public void testPreorderTraversal() {
         BSTree t = new BSTree();
         List<Integer> expected = Arrays.asList(10, 5, 1, 7, 40, 50);

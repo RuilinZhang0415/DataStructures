@@ -159,6 +159,42 @@ public class BSTree {
         return n;
     }
 
+    public List<List<Integer>> verticalTraversal(TreeNode n) {
+        if (n == null) return new ArrayList<>();
+
+        List<List<Integer>> lists = new ArrayList<>();
+        List<Integer> curr = new ArrayList<>();
+        curr.add(n.key);
+        lists.add(curr);
+        int[] range = new int[] {0, 0};
+        verticalTraversalAux(n.left, lists, range, -1);
+        verticalTraversalAux(n.right, lists, range, 1);
+        System.out.println("range: " + range[0] + ", " + range[1]);
+
+        return lists;
+    }
+
+    private void verticalTraversalAux(TreeNode n, List<List<Integer>> lists, int[] range, int currLayer) {
+        if (n == null) return;
+
+        if (currLayer < range[0]) {
+            range[0] = currLayer;
+            List<Integer> toAdd = new ArrayList<>();
+            toAdd.add(n.key);
+            lists.add(0, toAdd);
+        } else if (currLayer > range[1]) {
+            range[1] = currLayer;
+            List<Integer> toAdd = new ArrayList<>();
+            toAdd.add(n.key);
+            lists.add(range[1] - range[0], toAdd);
+        } else {
+            lists.get(currLayer - range[0]).add(n.key);
+        }
+
+        verticalTraversalAux(n.left, lists, range, currLayer - 1);
+        verticalTraversalAux(n.right, lists, range, currLayer + 1);
+    }
+
     public List<Integer> preorderTraversal(TreeNode n) {
         ArrayList<Integer> l = new ArrayList<>();
         preorderTraversalAux(n, l);
