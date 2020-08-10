@@ -1,8 +1,6 @@
 package main;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class BSTree {
     public class TreeNode {
@@ -159,41 +157,85 @@ public class BSTree {
         return n;
     }
 
+    public class Tuple {
+        TreeNode node;
+        int level;
+
+        public Tuple(TreeNode n, int i) {
+            node = n;
+            level = i;
+        }
+    }
+
     public List<List<Integer>> verticalTraversal(TreeNode n) {
         if (n == null) return new ArrayList<>();
 
         List<List<Integer>> lists = new ArrayList<>();
-        List<Integer> curr = new ArrayList<>();
-        curr.add(n.key);
-        lists.add(curr);
-        int[] range = new int[] {0, 0};
-        verticalTraversalAux(n.left, lists, range, -1);
-        verticalTraversalAux(n.right, lists, range, 1);
-        System.out.println("range: " + range[0] + ", " + range[1]);
+        int range[] = new int[] {1, 0};
+        Deque<Tuple> queue = new ArrayDeque<>();
+        queue.addFirst(new Tuple(n, 0));
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            
+            Tuple curr = queue.removeLast();
+
+            if (curr.level < range[0]) {
+                range[0] = curr.level;
+                List<Integer> toAdd = new ArrayList<>();
+                toAdd.add(curr.node.key);
+                lists.add(0, toAdd);
+            } else if (curr.level > range[1]) {
+                range[1] = curr.level;
+                List<Integer> toAdd = new ArrayList<>();
+                toAdd.add(curr.node.key);
+                lists.add(range[1] - range[0], toAdd);
+            } else {
+                lists.get(curr.level - range[0]).add(curr.node.key);
+            }
+
+            if (curr.node.left != null) queue.addFirst(new Tuple(curr.node.left, curr.level - 1));
+            if (curr.node.right != null) queue.addFirst(new Tuple(curr.node.right, curr.level + 1));
+        }
+
 
         return lists;
     }
 
-    private void verticalTraversalAux(TreeNode n, List<List<Integer>> lists, int[] range, int currLayer) {
-        if (n == null) return;
-
-        if (currLayer < range[0]) {
-            range[0] = currLayer;
-            List<Integer> toAdd = new ArrayList<>();
-            toAdd.add(n.key);
-            lists.add(0, toAdd);
-        } else if (currLayer > range[1]) {
-            range[1] = currLayer;
-            List<Integer> toAdd = new ArrayList<>();
-            toAdd.add(n.key);
-            lists.add(range[1] - range[0], toAdd);
-        } else {
-            lists.get(currLayer - range[0]).add(n.key);
-        }
-
-        verticalTraversalAux(n.left, lists, range, currLayer - 1);
-        verticalTraversalAux(n.right, lists, range, currLayer + 1);
-    }
+//    public List<List<Integer>> verticalTraversal(TreeNode n) {
+//        if (n == null) return new ArrayList<>();
+//
+//        List<List<Integer>> lists = new ArrayList<>();
+//        List<Integer> curr = new ArrayList<>();
+//        curr.add(n.key);
+//        lists.add(curr);
+//        int[] range = new int[] {0, 0};
+//        verticalTraversalAux(n.left, lists, range, -1);
+//        verticalTraversalAux(n.right, lists, range, 1);
+//
+//        return lists;
+//    }
+//
+//    private void verticalTraversalAux(TreeNode n, List<List<Integer>> lists, int[] range, int currLayer) {
+//        if (n == null) return;
+//
+//        if (currLayer < range[0]) {
+//            range[0] = currLayer;
+//            List<Integer> toAdd = new ArrayList<>();
+//            toAdd.add(n.key);
+//            lists.add(0, toAdd);
+//        } else if (currLayer > range[1]) {
+//            range[1] = currLayer;
+//            List<Integer> toAdd = new ArrayList<>();
+//            toAdd.add(n.key);
+//            lists.add(range[1] - range[0], toAdd);
+//        } else {
+//            lists.get(currLayer - range[0]).add(n.key);
+//        }
+//
+//        verticalTraversalAux(n.left, lists, range, currLayer - 1);
+//        verticalTraversalAux(n.right, lists, range, currLayer + 1);
+//    }
 
     public List<Integer> preorderTraversal(TreeNode n) {
         ArrayList<Integer> l = new ArrayList<>();

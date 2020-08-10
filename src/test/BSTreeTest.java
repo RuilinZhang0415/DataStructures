@@ -4,6 +4,7 @@ import main.BSTree;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -56,6 +57,7 @@ public class BSTreeTest {
         List<List<Integer>> expected = Arrays.asList(Arrays.asList(3), Arrays.asList(9,15), Arrays.asList(20), Arrays.asList(27));
 
         List<List<Integer>> actual = t.verticalTraversal(t.root);
+
         for (int i = 0; i < expected.size(); i++) {
             int len = expected.get(i).size();
             for (int j = 0; j < len; j++) {
