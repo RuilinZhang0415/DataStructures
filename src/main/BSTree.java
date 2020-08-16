@@ -13,7 +13,8 @@ public class BSTree {
     }
 
     // Instance Vairables
-    public TreeNode root;
+    private TreeNode root;
+    private int size;
 
     // Constructors
     public BSTree() {
@@ -21,19 +22,7 @@ public class BSTree {
     }
 
     // Public Instance Methods
-    public int getSize(TreeNode n) {
-        if (n == null) return 0;
-
-        ArrayDeque<TreeNode> queue = new ArrayDeque<>();
-        queue.add(n);
-        int size = 0;
-        while (!queue.isEmpty()) {
-            size++;
-            TreeNode curr = queue.removeFirst();
-            if (curr.left != null) queue.add(curr.left);
-            if (curr.right != null) queue.add(curr.right);
-        }
-
+    public int getSize() {
         return size;
     }
 
@@ -64,11 +53,9 @@ public class BSTree {
 //        return size;
 //    }
 
-    public int getHeight(TreeNode n) {
-        if (n == null) return 0;
-
+    public int getHeight() {
         ArrayDeque<TreeNode> queue = new ArrayDeque<>();
-        queue.add(n);
+        if (root != null) queue.add(root);
         int height = 0;
         while (!queue.isEmpty()) {
             height++;
@@ -105,8 +92,8 @@ public class BSTree {
         return curr.key;
     }
 
-    public boolean containsKey(TreeNode n, int key) {
-        TreeNode curr = n;
+    public boolean contains(int key) {
+        TreeNode curr = root;
         while (curr != null) {
             if (key < curr.key) curr = curr.left;
             else if (key > curr.key) curr = curr.right;
@@ -116,7 +103,11 @@ public class BSTree {
         return false;
     }
 
-    public TreeNode insertKey(TreeNode n, int key) {
+    public void insert(int key) {
+        root = insertKey(root, key);
+    }
+
+    private TreeNode insertKey(TreeNode n, int key) {
         TreeNode curr = n, prev = null;
         while (curr != null) {
             if (key < curr.key) {
@@ -129,6 +120,8 @@ public class BSTree {
                 return n;
             }
         }
+
+        size++;
         if (prev == null) {
             return new TreeNode(key);
         } else {
@@ -139,7 +132,11 @@ public class BSTree {
         return n;
     }
 
-    public TreeNode deleteKey(TreeNode n, int key) {
+    public void delete(int key) {
+        root = deleteKey(root, key);
+    }
+
+    private TreeNode deleteKey(TreeNode n, int key) {
         if (n == null) {
             return null;
         } else if (key < n.key) {
@@ -147,8 +144,14 @@ public class BSTree {
         } else if (key > n.key) {
             n.right = deleteKey(n.right, key);
         } else {
-            if (n.left == null) return n.right;
-            if (n.right == null) return n.left;
+            if (n.left == null) {
+                size--;
+                return n.right;
+            }
+            if (n.right == null) {
+                size--;
+                return n.left;
+            }
 
             n.key = minKey(n.right);
             n.right = deleteKey(n.right, n.key);
@@ -167,7 +170,11 @@ public class BSTree {
         }
     }
 
-    public List<List<Integer>> verticalTraversal(TreeNode n) {
+    public List<List<Integer>> verticalTraversal() {
+        return verticalTraversalAux(root);
+    }
+
+    private List<List<Integer>> verticalTraversalAux(TreeNode n) {
         if (n == null) return new ArrayList<>();
 
         List<List<Integer>> lists = new ArrayList<>();
@@ -237,13 +244,13 @@ public class BSTree {
 //        verticalTraversalAux(n.right, lists, range, currLayer + 1);
 //    }
 
-    public List<Integer> preorderTraversal(TreeNode n) {
+    public List<Integer> preorderTraversal() {
         ArrayList<Integer> l = new ArrayList<>();
-        preorderTraversalAux(n, l);
+        preorderTraversalAux(root, l);
         return l;
     }
 
-    public void preorderTraversalAux(TreeNode n, ArrayList<Integer> l) {
+    private void preorderTraversalAux(TreeNode n, ArrayList<Integer> l) {
         if (n == null) return;
 
         l.add(n.key);
@@ -252,9 +259,12 @@ public class BSTree {
     }
 
     // Given a preorder traversal, construct the binary search tree
-    public TreeNode constructTreeFromPreorderTraversal(int[] pre) {
+    public BSTree constructTreeFromPreorderTraversal(int[] pre) {
+        BSTree t = new BSTree();
         int index[] = new int[] {0};
-        return constructTreeFromPreorderTraversalAux(pre, Integer.MIN_VALUE, Integer.MAX_VALUE, index);
+        t.root = constructTreeFromPreorderTraversalAux(pre, Integer.MIN_VALUE, Integer.MAX_VALUE, index);
+
+        return t;
     }
 
     private TreeNode constructTreeFromPreorderTraversalAux(int[] pre, int low, int high, int[] currIndex) {
@@ -270,8 +280,11 @@ public class BSTree {
     }
 
     // Convert a sorted list to a binary search tree
-    public TreeNode sortedListToBST(List<Integer> list) {
-        return sortedListToBSTAux(list, new int[] {0}, list.size());
+    public BSTree sortedListToBST(List<Integer> list) {
+        BSTree t = new BSTree();
+        t.root = sortedListToBSTAux(list, new int[] {0}, list.size());
+
+        return t;
     }
 
     private TreeNode sortedListToBSTAux(List<Integer> list, int[] index, int n) {
@@ -289,12 +302,12 @@ public class BSTree {
     }
 
     // Find the median under the given node, in place
-    // Similar to the in-place vertion of the getSize() method
-    public double median(TreeNode n) {
-        int size = getSize(n), count = 0, median = (size + 2) / 2;
+    // Similar to the in-place version of the getSize() method
+    public double median() {
+        int size = getSize(), count = 0, median = (size + 2) / 2;
         boolean single = size % 2 == 0 ? false : true;
 
-        TreeNode curr = n, predecessor = null, prev = null;
+        TreeNode curr = root, predecessor = null, prev = null;
 
         while (curr != null) {
             if (curr.left == null) {
