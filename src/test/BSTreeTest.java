@@ -117,4 +117,17 @@ public class BSTreeTest {
         t = new BSTree();
         assertEquals(Integer.MAX_VALUE, t.median(), tolerance);
     }
+
+    @Test
+    public void testDiameter() {
+        BSTree t = new BSTree();
+        int[] arr = {1,2,3,4,5,6,7};
+        for (int i: arr) t.insert(i);
+        assertEquals(6, t.diameter());
+
+        t = new BSTree();
+        arr = new int[] {100, 110, 50, 60, 70, 0, 10, 20, 30, 40, -10, -20};
+        for (int i: arr) t.insert(i);
+        assertEquals(7, t.diameter());
+    }
 }

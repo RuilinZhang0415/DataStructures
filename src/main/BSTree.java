@@ -346,4 +346,24 @@ public class BSTree {
 
         return Integer.MAX_VALUE;
     }
+
+    // Compute the longest distance (num of nodes - 1) between any two nodes in this tree.
+    public int diameter() {
+        return diameterAux(root)[1] == 0 ? 0 : diameterAux(root)[1] - 1;
+    }
+
+    private int[] diameterAux(TreeNode n) {
+        if (n == null) return new int[2];
+
+        int[] left = diameterAux(n.left);
+        int[] right = diameterAux(n.right);
+
+        int[] retVal = new int[2];
+        // Height at this node
+        retVal[0] = Math.max(left[0], right[0]) + 1;
+        // Maximum diameter for this node and its children
+        retVal[1] = Math.max(Math.max(left[1], right[1]), left[0] + right[0] + 1);
+
+        return retVal;
+    }
 }

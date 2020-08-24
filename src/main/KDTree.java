@@ -6,18 +6,18 @@ import java.util.Arrays;
 import java.util.List;
 
 public class KDTree {
-    public class KDNode {
-        public int dim, coords[];
-        public KDNode left, right;
+    class KDNode {
+        int dim, coords[];
+        KDNode left, right;
 
-        public KDNode(int coords[]) {
+        KDNode(int coords[]) {
             this.dim = coords.length;
             this.coords = Arrays.copyOf(coords, dim);
         }
     }
 
     // Instance fields
-    public KDNode root;
+    private KDNode root;
     private int size;
     private final int k;
 
